@@ -5,10 +5,10 @@
  * Inspired by the Claude Code tamagotchi concept
  *
  * Hardware: M5Stack Core2
- * Libraries required: M5Core2
+ * Libraries required: M5Unified, M5GFX
  */
 
-#include <M5Core2.h>
+#include <M5Unified.h>
 
 // Screen dimensions
 #define SCREEN_WIDTH 320
@@ -62,10 +62,14 @@ void initMatrixRain();
 void handleTouch();
 
 void setup() {
-  M5.begin();
-  M5.Lcd.fillScreen(COLOR_BLACK);
-  M5.Lcd.setTextColor(COLOR_WHITE);
-  M5.Lcd.setTextSize(2);
+  // Initialize M5Unified with default configuration
+  auto cfg = M5.config();
+  M5.begin(cfg);
+
+  // Setup display
+  M5.Display.fillScreen(COLOR_BLACK);
+  M5.Display.setTextColor(COLOR_WHITE);
+  M5.Display.setTextSize(2);
 
   // Initialize matrix rain
   initMatrixRain();
@@ -75,7 +79,6 @@ void setup() {
   drawBottomStatus();
   drawClaude(CLAUDE_X, CLAUDE_Y, CLAUDE_SCALE, 0);
 
-  Serial.begin(115200);
   Serial.println("Claude Tamagotchi Started!");
 }
 
@@ -92,7 +95,7 @@ void loop() {
     breatheOffset = sin(currentTime / 500.0) * 3;
 
     // Clear character area and redraw
-    M5.Lcd.fillRect(CLAUDE_X - 40, CLAUDE_Y - 50, 80, 100, COLOR_BLACK);
+    M5.Display.fillRect(CLAUDE_X - 40, CLAUDE_Y - 50, 80, 100, COLOR_BLACK);
 
     // Update matrix rain in character area background
     updateMatrixRain();
@@ -119,7 +122,7 @@ void updateMatrixRain() {
   // Only draw rain on sides of screen (not over Claude)
   for (int i = 0; i < NUM_DROPS; i++) {
     // Erase old position
-    M5.Lcd.fillRect(dropX[i], dropY[i], 8, 12, COLOR_BLACK);
+    M5.Display.fillRect(dropX[i], dropY[i], 8, 12, COLOR_BLACK);
 
     // Update position
     dropY[i] += dropSpeed[i];
@@ -133,60 +136,60 @@ void updateMatrixRain() {
       // Draw character
       char c = random(33, 126);  // Random ASCII character
       uint16_t color = (random(10) > 7) ? COLOR_GREEN : COLOR_DARK_GREEN;
-      M5.Lcd.setTextSize(1);
-      M5.Lcd.setTextColor(color);
-      M5.Lcd.setCursor(dropX[i], dropY[i]);
-      M5.Lcd.print(c);
+      M5.Display.setTextSize(1);
+      M5.Display.setTextColor(color);
+      M5.Display.setCursor(dropX[i], dropY[i]);
+      M5.Display.print(c);
     }
   }
 }
 
 void drawStatusBar() {
   // Top status bar background
-  M5.Lcd.fillRect(0, 0, SCREEN_WIDTH, 22, COLOR_STATUS_BG);
+  M5.Display.fillRect(0, 0, SCREEN_WIDTH, 22, COLOR_STATUS_BG);
 
   // WiFi icon (simple representation)
-  M5.Lcd.setTextSize(1);
-  M5.Lcd.setTextColor(COLOR_WHITE);
-  M5.Lcd.setCursor(5, 6);
-  M5.Lcd.print("WiFi");
+  M5.Display.setTextSize(1);
+  M5.Display.setTextColor(COLOR_WHITE);
+  M5.Display.setCursor(5, 6);
+  M5.Display.print("WiFi");
 
   // Battery indicator
-  M5.Lcd.setCursor(SCREEN_WIDTH - 40, 6);
-  M5.Lcd.print("100%");
+  M5.Display.setCursor(SCREEN_WIDTH - 40, 6);
+  M5.Display.print("100%");
 
   // Status badge in center
   int badgeWidth = 80;
   int badgeX = (SCREEN_WIDTH - badgeWidth) / 2;
   uint16_t badgeColor = stateColors[currentState];
 
-  M5.Lcd.fillRoundRect(badgeX, 3, badgeWidth, 16, 4, badgeColor);
-  M5.Lcd.setTextColor(COLOR_BLACK);
-  M5.Lcd.setCursor(badgeX + 10, 6);
-  M5.Lcd.print(stateLabels[currentState]);
+  M5.Display.fillRoundRect(badgeX, 3, badgeWidth, 16, 4, badgeColor);
+  M5.Display.setTextColor(COLOR_BLACK);
+  M5.Display.setCursor(badgeX + 10, 6);
+  M5.Display.print(stateLabels[currentState]);
 }
 
 void drawBottomStatus() {
   // Bottom area
-  M5.Lcd.fillRect(0, SCREEN_HEIGHT - 25, SCREEN_WIDTH, 25, COLOR_BLACK);
+  M5.Display.fillRect(0, SCREEN_HEIGHT - 25, SCREEN_WIDTH, 25, COLOR_BLACK);
 
   // Draw "CODING" text centered at bottom
-  M5.Lcd.setTextSize(2);
-  M5.Lcd.setTextColor(COLOR_WHITE);
+  M5.Display.setTextSize(2);
+  M5.Display.setTextColor(COLOR_WHITE);
   String bottomText = stateLabels[currentState];
   int textWidth = bottomText.length() * 12;
-  M5.Lcd.setCursor((SCREEN_WIDTH - textWidth) / 2, SCREEN_HEIGHT - 22);
-  M5.Lcd.print(bottomText);
+  M5.Display.setCursor((SCREEN_WIDTH - textWidth) / 2, SCREEN_HEIGHT - 22);
+  M5.Display.print(bottomText);
 
   // Draw button labels
-  M5.Lcd.setTextSize(1);
-  M5.Lcd.setTextColor(COLOR_DARK_GREEN);
-  M5.Lcd.setCursor(45, SCREEN_HEIGHT - 8);
-  M5.Lcd.print("FEED");
-  M5.Lcd.setCursor(145, SCREEN_HEIGHT - 8);
-  M5.Lcd.print("PLAY");
-  M5.Lcd.setCursor(240, SCREEN_HEIGHT - 8);
-  M5.Lcd.print("STAT");
+  M5.Display.setTextSize(1);
+  M5.Display.setTextColor(COLOR_DARK_GREEN);
+  M5.Display.setCursor(45, SCREEN_HEIGHT - 8);
+  M5.Display.print("FEED");
+  M5.Display.setCursor(145, SCREEN_HEIGHT - 8);
+  M5.Display.print("PLAY");
+  M5.Display.setCursor(240, SCREEN_HEIGHT - 8);
+  M5.Display.print("STAT");
 }
 
 void drawClaude(int x, int y, int scale, float bounce) {
@@ -198,10 +201,10 @@ void drawClaude(int x, int y, int scale, float bounce) {
   int bodyY = y - bodyHeight / 2;
 
   // Main body
-  M5.Lcd.fillRect(bodyX, bodyY, bodyWidth, bodyHeight, COLOR_CLAUDE);
+  M5.Display.fillRect(bodyX, bodyY, bodyWidth, bodyHeight, COLOR_CLAUDE);
 
   // Body outline/shading
-  M5.Lcd.drawRect(bodyX, bodyY, bodyWidth, bodyHeight, COLOR_CLAUDE_DARK);
+  M5.Display.drawRect(bodyX, bodyY, bodyWidth, bodyHeight, COLOR_CLAUDE_DARK);
 
   // Eyes (two small black squares)
   int eyeSize = 2 * scale;
@@ -209,8 +212,8 @@ void drawClaude(int x, int y, int scale, float bounce) {
   int leftEyeX = bodyX + 2 * scale;
   int rightEyeX = bodyX + bodyWidth - 4 * scale;
 
-  M5.Lcd.fillRect(leftEyeX, eyeY, eyeSize, eyeSize, COLOR_BLACK);
-  M5.Lcd.fillRect(rightEyeX, eyeY, eyeSize, eyeSize, COLOR_BLACK);
+  M5.Display.fillRect(leftEyeX, eyeY, eyeSize, eyeSize, COLOR_BLACK);
+  M5.Display.fillRect(rightEyeX, eyeY, eyeSize, eyeSize, COLOR_BLACK);
 
   // Mouth (small line or smile based on state)
   int mouthY = bodyY + 7 * scale;
@@ -219,13 +222,13 @@ void drawClaude(int x, int y, int scale, float bounce) {
 
   if (currentState == STATE_SLEEPING) {
     // Zzz for sleeping
-    M5.Lcd.setTextSize(1);
-    M5.Lcd.setTextColor(COLOR_WHITE);
-    M5.Lcd.setCursor(x + 20, y - 30);
-    M5.Lcd.print("Zzz");
+    M5.Display.setTextSize(1);
+    M5.Display.setTextColor(COLOR_WHITE);
+    M5.Display.setCursor(x + 20, y - 30);
+    M5.Display.print("Zzz");
   } else {
     // Simple smile
-    M5.Lcd.fillRect(mouthX, mouthY, mouthWidth, scale, COLOR_BLACK);
+    M5.Display.fillRect(mouthX, mouthY, mouthWidth, scale, COLOR_BLACK);
   }
 
   // Legs (two small rectangles at bottom)
@@ -238,36 +241,40 @@ void drawClaude(int x, int y, int scale, float bounce) {
   // Animate legs slightly
   int legOffset = (int)(abs(bounce) / 2);
 
-  M5.Lcd.fillRect(leftLegX, legY - legOffset, legWidth, legHeight + legOffset, COLOR_CLAUDE);
-  M5.Lcd.fillRect(rightLegX, legY - legOffset, legWidth, legHeight + legOffset, COLOR_CLAUDE);
+  M5.Display.fillRect(leftLegX, legY - legOffset, legWidth, legHeight + legOffset, COLOR_CLAUDE);
+  M5.Display.fillRect(rightLegX, legY - legOffset, legWidth, legHeight + legOffset, COLOR_CLAUDE);
 
   // Arms (small rectangles on sides)
   int armWidth = 2 * scale;
   int armHeight = 4 * scale;
   int armY = bodyY + 4 * scale;
 
-  M5.Lcd.fillRect(bodyX - armWidth, armY, armWidth, armHeight, COLOR_CLAUDE);
-  M5.Lcd.fillRect(bodyX + bodyWidth, armY, armWidth, armHeight, COLOR_CLAUDE);
+  M5.Display.fillRect(bodyX - armWidth, armY, armWidth, armHeight, COLOR_CLAUDE);
+  M5.Display.fillRect(bodyX + bodyWidth, armY, armWidth, armHeight, COLOR_CLAUDE);
 
   // Antenna/ears (small protrusions on top)
   int earWidth = 2 * scale;
   int earHeight = 2 * scale;
 
-  M5.Lcd.fillRect(leftEyeX, bodyY - earHeight, earWidth, earHeight, COLOR_CLAUDE);
-  M5.Lcd.fillRect(rightEyeX, bodyY - earHeight, earWidth, earHeight, COLOR_CLAUDE);
+  M5.Display.fillRect(leftEyeX, bodyY - earHeight, earWidth, earHeight, COLOR_CLAUDE);
+  M5.Display.fillRect(rightEyeX, bodyY - earHeight, earWidth, earHeight, COLOR_CLAUDE);
 }
 
 void handleTouch() {
-  if (M5.Touch.ispressed()) {
-    TouchPoint_t pos = M5.Touch.getPressPoint();
+  auto touchDetail = M5.Touch.getDetail();
+
+  // Check for new touch (wasPressed ensures we only trigger once per touch)
+  if (touchDetail.wasPressed()) {
+    int x = touchDetail.x;
+    int y = touchDetail.y;
 
     // Check which button area was touched
-    if (pos.y > SCREEN_HEIGHT - 50) {
-      if (pos.x < SCREEN_WIDTH / 3) {
+    if (y > SCREEN_HEIGHT - 50) {
+      if (x < SCREEN_WIDTH / 3) {
         // Left button - Feed
         currentState = STATE_CODING;
         Serial.println("Feed pressed - Coding");
-      } else if (pos.x < 2 * SCREEN_WIDTH / 3) {
+      } else if (x < 2 * SCREEN_WIDTH / 3) {
         // Middle button - Play
         currentState = STATE_REASONING;
         Serial.println("Play pressed - Reasoning");
@@ -280,9 +287,6 @@ void handleTouch() {
       // Redraw status elements
       drawStatusBar();
       drawBottomStatus();
-
-      // Debounce
-      delay(200);
     }
   }
 }
