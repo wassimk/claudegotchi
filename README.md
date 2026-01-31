@@ -1,14 +1,15 @@
-# Claude Tamagotchi for M5Stack Core2
+# Claude Code Notifier for M5Stack Core2
 
-A cute Claude mascot tamagotchi that runs on the M5Stack Core2 IoT device.
+A cute Claude mascot that lives on your desk and notifies you when Claude Code needs attention. The character wanders around peacefully when idle, then gets excited and chirps when it's time to interact with Claude Code.
 
 ## Features
 
-- Pixel-art Claude character with idle breathing animation
-- Matrix-style code rain background effect
-- Status display showing current state (CODING, REASONING, TESTING, etc.)
-- Touch screen interaction via bottom buttons
-- Status bar with WiFi and battery indicators
+- **Idle Mode**: Claude slowly wanders around the screen with gentle breathing animation
+- **Attention Mode**: Claude bounces excitedly, raises arms, and chirps to get your attention
+- **Matrix Rain**: Animated code rain background effect
+- **Sound Effects**: Cute chirp sounds (toggleable)
+- **Touch Controls**: Three bottom buttons for interaction
+- **Serial Commands**: Can be triggered via serial for testing (future: WiFi/hooks integration)
 
 ## Hardware Requirements
 
@@ -77,11 +78,24 @@ If unsure which chip your device has, install both drivers.
 
 ## Usage
 
-- **Bottom Left Touch Area**: Changes state to CODING
-- **Bottom Center Touch Area**: Changes state to REASONING
-- **Bottom Right Touch Area**: Changes state to TESTING
+### Touch Buttons
 
-The Claude character will animate with a breathing/bouncing motion, and the matrix code rain effect will continuously animate in the background.
+| Button | Label | Action |
+|--------|-------|--------|
+| Left | SOUND | Toggle sound on/off |
+| Center | ALERT | Manually trigger attention mode (for testing) |
+| Right | DISMISS | Return to idle mode |
+
+### Serial Commands (for testing)
+
+Open Serial Monitor (115200 baud) and send:
+- `ATTENTION` - Trigger attention mode
+- `IDLE` - Return to idle mode
+
+### States
+
+- **IDLE**: Claude wanders slowly, gentle breathing animation, peaceful
+- **ATTENTION!**: Claude bounces excitedly, arms up, chirps every 3 seconds, flashing "!" indicator
 
 ## Project Structure
 
@@ -95,12 +109,22 @@ claude-tamagotchi/
 
 ## Future Enhancements (Planned)
 
-- [ ] More expressive animations (happy, sad, excited)
-- [ ] Stats system (hunger, happiness, energy)
-- [ ] Sound effects via built-in speaker
-- [ ] Real Claude Code integration via WiFi/Serial
-- [ ] Persistent state storage
-- [ ] More interactive mini-games
+- [ ] WiFi connectivity for remote notifications
+- [ ] Claude Code hooks integration (macOS → device communication)
+- [ ] Multiple notification types (user input needed, error, task complete)
+- [ ] Persistent settings storage
+- [ ] Battery level display
+- [ ] Different chirp sounds for different notification types
+
+## How It Will Work with Claude Code
+
+The plan is to use Claude Code hooks to send notifications to this device:
+
+1. Claude Code hook detects when user input is needed
+2. Hook sends HTTP request or serial command to M5Stack
+3. M5Stack enters attention mode and chirps
+4. User notices, interacts with Claude Code
+5. Hook sends idle signal when done
 
 ## License
 
