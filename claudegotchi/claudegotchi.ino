@@ -26,11 +26,11 @@
 #define COLOR_STATUS_BG  0x2104  // Dark gray for status bar
 
 // Claude character bounds for wandering
-#define CLAUDE_MIN_X 60
-#define CLAUDE_MAX_X 260
-#define CLAUDE_MIN_Y 80
-#define CLAUDE_MAX_Y 180
-#define CLAUDE_SCALE 4
+#define CLAUDE_MIN_X 70
+#define CLAUDE_MAX_X 250
+#define CLAUDE_MIN_Y 85
+#define CLAUDE_MAX_Y 165
+#define CLAUDE_SCALE 5
 
 // Animation timing
 #define IDLE_ANIM_INTERVAL 80      // Slower for idle
@@ -250,7 +250,7 @@ void playChirp() {
 
 void clearClaudeArea(int x, int y) {
   // Clear area around Claude for redraw
-  M5.Display.fillRect(x - 50, y - 45, 100, 95, COLOR_BLACK);
+  M5.Display.fillRect(x - 60, y - 55, 120, 115, COLOR_BLACK);
 }
 
 void initMatrixRain() {
@@ -278,7 +278,7 @@ void updateMatrixRain() {
     // Only draw if not in Claude's area
     int cdx = abs(dropX[i] - (int)claudeX);
     int cdy = abs(dropY[i] - (int)claudeY);
-    if (cdx > 55 || cdy > 50) {
+    if (cdx > 65 || cdy > 60) {
       uint16_t color = (random(10) > 7) ? COLOR_GREEN : COLOR_DARK_GREEN;
       M5.Display.setTextSize(1);
       M5.Display.setTextColor(color, COLOR_BLACK);
