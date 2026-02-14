@@ -2,7 +2,7 @@
  * Claudegotchi - M5Stack Core2
  *
  * A cute Claude mascot that notifies you when Claude Code needs attention.
- * Connects to Claude Code via hooks to receive notifications.
+ * Currently controlled via serial commands. Claude Code hooks integration planned.
  *
  * Hardware: M5Stack Core2
  * Libraries required: M5Unified, M5GFX
