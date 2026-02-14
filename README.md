@@ -1,6 +1,6 @@
 # Claudegotchi
 
-> [!WARNING]
+> [!NOTE]
 > **Work in progress** — This is a fun side project under active development. Claude currently looks like a blocky coral rectangle with stick arms, and that's part of the charm. Expect rough edges.
 
 A cute Claude mascot that lives on your desk and notifies you when [Claude Code](https://docs.anthropic.com/en/docs/claude-code) needs attention.
