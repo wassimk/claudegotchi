@@ -1,5 +1,6 @@
 # Claudegotchi
 
+> [!WARNING]
 > **Work in progress** — This is a fun side project under active development. Claude currently looks like a blocky coral rectangle with stick arms, and that's part of the charm. Expect rough edges.
 
 A cute Claude mascot that lives on your desk and notifies you when [Claude Code](https://docs.anthropic.com/en/docs/claude-code) needs attention.
@@ -50,7 +51,3 @@ Connect via Serial Monitor at 115200 baud:
 ## Inspiration
 
 Inspired by [@taku_sid's Stack-chan demo](https://x.com/taku_sid/status/2014540202803658973) — a much cuter version of this idea using a [Stack-chan](https://github.com/stack-chan/stack-chan) robot. That project isn't public yet, so this is my scrappy take on it in the meantime.
-
-## License
-
-MIT
